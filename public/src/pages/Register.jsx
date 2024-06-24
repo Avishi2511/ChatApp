@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {Link} from 'react-router-dom'
 import Logo from "../assets/logo.svg"
 import {ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 function Register() {
     const [values, setValues] = useState({
@@ -12,23 +13,36 @@ function Register() {
         confirmPassword: "",
     });
 
-    const handleSubmit = (event) =>{
-        event.preventDefault();
-        alert("form");
-    };
+    const toastOptions = {
+        position: "bottom-right",
+        autoClose: 8000,
+        pauseonHover: true,
+        draggable: true,
+        theme: "dark",
+    }
 
+    const handleSubmit = async (event) =>{
+        event.preventDefault();
+        if (handleValidation()){
+            console.log("Form Submitted");
+        }
+    };
     
-    const handleValidation = (event) =>{
+    const handleValidation = () =>{
         const {password, confirmPassword, username, email} = values;
         if(password!==confirmPassword){
-            toast.error("Password and Confirm Password should be same",{
-                position: "bottom-right",
-                autoClose: 8000,
-                pauseonHover: true,
-                draggable: true,
-                theme: "dark",
-            });
-        }   
+            toast.error("Password and Confirm Password should be same", toastOptions);
+            return false;
+        } else if (username.length<3){
+            toast.error("Username length should be more than 3 characters", toastOptions);
+        } else if (password.length<8){
+            toast.error("Password length should be more than 8 characters", toastOptions);
+            return false;
+        } else if(email==="") {
+            toast.error("Email is required", toastOptions);
+            return false;
+        }
+        return true;
     };
     
 

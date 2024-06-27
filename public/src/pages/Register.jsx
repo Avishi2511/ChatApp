@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom'
 import Logo from "../assets/logo.svg"
 import {ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import axios from "axios"
+import { registerRoute } from "../utils/APIroutes";
 
 function Register() {
     const [values, setValues] = useState({
@@ -19,12 +21,18 @@ function Register() {
         pauseonHover: true,
         draggable: true,
         theme: "dark",
-    }
+    };
 
     const handleSubmit = async (event) =>{
         event.preventDefault();
         if (handleValidation()){
-            console.log("Form Submitted");
+            console.log("in validation", registerRoute);
+            const {password, username, email} = values;
+            const {data} = await axios.post( registerRoute, {
+                username,
+                email,
+                password,
+            });
         }
     };
     
@@ -45,7 +53,6 @@ function Register() {
         return true;
     };
     
-
     const handleChange = (event) =>{
         setValues({...values, [event.target.name]: event.target.value})
     };
@@ -53,7 +60,7 @@ function Register() {
   return (
     <>
         <FormContainer >
-            <form action >{(event)=>handleSubmit(event)}
+            <form onSubmit={(event)=>handleSubmit(event)}>
                 <div className='brand'>
                     <img src = {Logo} alt="" />
                     <h1>Snappy</h1>
@@ -73,7 +80,7 @@ function Register() {
                 <input 
                     type = "password" 
                     placeholder = "Password" 
-                    name = "Password" 
+                    name = "password" 
                     onChange = {(e) => handleChange(e)} 
                 />
                 <input 
@@ -88,8 +95,7 @@ function Register() {
         </FormContainer>
         <ToastContainer />
     </>
-    
-  )
+  );
 }
 
 const FormContainer = styled.div `

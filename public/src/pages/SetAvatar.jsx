@@ -5,7 +5,7 @@ import loader from "../assets/loader.gif"
 import {ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import axios from "axios"
-import { SetAvatarRoute } from "../utils/APIroutes";
+import { SetAvatarRoute, setAvatarRoute } from "../utils/APIroutes";
 import { Buffer } from 'buffer'
 
 function SetAvatar() {
@@ -23,7 +23,26 @@ function SetAvatar() {
         theme: "dark",
     };
 
-    const setProfilePicture = async() => {};
+    const setProfilePicture = async() => {
+        if(selectedAvatar === undefined){
+            toast.error("Please select an avatar", toastOptions);
+        }
+        else {
+            const user = await JSON.parse(localStorage.getItem("chat-app-user"));
+            const {data} = await axios.post(`${setAvatarRoute}/${user._id}`, {
+                image: avatars[selectedAvatar],
+            });
+            
+            if(data.isSet){
+                user.isAvatarImageSet = true;
+                user.avatarImage = data.image;
+                localStorage.setItem("chat-app-user", JSON.stringify(user));
+                navigate('/');
+            } else{
+                toast.error("Error setting avatar. Please try again", toastOptions);
+            }
+        }
+    };
 
     useEffect(()=>{
         async function fetchData(){
@@ -40,8 +59,14 @@ function SetAvatar() {
         } 
         fetchData();
     },[]);
+
     return (
     <>
+        {isLoading? (
+            <Container>
+            <img src = {loader} alt="loader" className='loader'/>
+            </Container>
+        ) : (
         <Container>
             <div className='title-container'>
                 <h1>Pick an avatar as your profile picture</h1>
@@ -60,13 +85,16 @@ function SetAvatar() {
                         />
                         </div>
                     );
-                })
-            }
+                })}
             </div>
+            <button className='submit-btn' onClick={setProfilePicture}>
+                Set As Profile Picture
+            </button>
+            <ToastContainer />
         </Container>
-        <ToastContainer />
+        )}
     </>
-    )
+    );
 }
 
 const Container = styled.div`

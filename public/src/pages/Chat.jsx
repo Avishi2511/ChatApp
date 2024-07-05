@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {useNavigate} from "react-router-dom"
 import axios from "axios"
 import Contacts from '../components/Contacts'
+import { allUsersRoute } from '../utils/APIroutes'
 
 function Chat() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ function Chat() {
     async function fetchData(){
       if(currentUser){
         if(currentUser.isAvatarImageSet){
-          const data = await axios.get(`$(allUsersRoute)/$(currentUser_id)`)
+          const data = await axios.get(`${allUsersRoute}/${currentUser._id}`)
           setContacts(data.data);
         }else{
           navigate("/setAvatar");

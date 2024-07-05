@@ -5,7 +5,7 @@ import loader from "../assets/loader.gif"
 import {ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import axios from "axios"
-import { SetAvatarRoute, setAvatarRoute } from "../utils/APIroutes";
+import { setAvatarRoute } from "../utils/APIroutes";
 import { Buffer } from 'buffer'
 
 function SetAvatar() {
@@ -24,9 +24,12 @@ function SetAvatar() {
     };
 
     useEffect(()=> {
-        if(!localStorage.getItem('chat-app-user')){
-          navigate("/login")
+        async function nav(){
+            if(!localStorage.getItem('chat-app-user')){
+                navigate("/login")
+            }
         }
+        nav(); 
     },[])
 
     const setProfilePicture = async() => {

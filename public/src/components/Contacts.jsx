@@ -14,9 +14,14 @@ function Contacts({contacts, currentUser}) {
         }
     },[currentUser]);
 
-    const changeCurrentChat = (index,contact) => { }
+    const changeCurrentChat = (index,contact) => {
+        /*
+        setCurrentSelected(index);
+        changeChat(contact);
+        */
+    }
 
-    return <>{
+    return (<>{
         currentUserName && currentUserName && (
             <Container>
                 <div className='brand'>
@@ -31,7 +36,6 @@ function Contacts({contacts, currentUser}) {
                                     index === currentSelected ? "selected": ""
                                 }`} 
                                 key={index}>
-                                
                                 <div className='avatar'>
                                     <img src={`data:image/svg+xml; base64, ${contact.avatarImage}`} 
                                     alt = "avatar"/>
@@ -60,6 +64,7 @@ function Contacts({contacts, currentUser}) {
         )
     }
     </>
+    );
 }
 
 const Container = styled.div `

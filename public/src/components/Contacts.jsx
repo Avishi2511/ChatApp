@@ -27,13 +27,16 @@ function Contacts({contacts, currentUser, changeChat}) {
                     <h3>Snappy</h3>
                 </div>
                 <div className='contacts'>
+                    
                     {contacts.map((contact, index) => {
                         return (
                             <div 
                                 className={`contact ${
                                     index === currentSelected ? "selected": ""
                                 }`} 
-                                key={index}>
+                                key={index}
+                                onClick = {()=> changeCurrentChat(index,contact)}
+                                >
                                 <div className='avatar'>
                                     <img src={`data:image/svg+xml; base64, ${contact.avatarImage}`} 
                                     alt = "avatar"/>
